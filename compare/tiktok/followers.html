@@ -1,0 +1,188 @@
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,200,300,400,500,600,700,800" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://subscriberwars.space/css/odometer.css">
+    <script src="https://kit.fontawesome.com/93168af8d4.js" crossorigin="anonymous"></script>
+    <script src="https://subscriberwars.space/js/odometer.js"></script>
+    <title id="page_title"></title>
+</head>
+
+<body>
+    <div class="head">
+        <div class="head_text"><i class="fa fa-brand fa-tiktok"></i> TikTok Live Follower Count <i class="fa fa-brand fa-tiktok"></i></div>
+    </div>
+    <div class="main_box_container">
+        <div class="main_box">
+            <img class="channel_banner" src="/images/banner_tiktok.png" id="banner_1">
+            <img class="channel_image" src="/images/pfp_placeholder.png" id="image_1">
+            <div id="channel_title_container">
+                <a id="title_1" class="channel_title" target="_blank"></a>
+            </div>
+            <div class="channel_subscribers odometer" id="subs_1"></div>
+            <div class="subscribers"><i class="fa fa-sharp fa-users"></i> Followers</div>
+        </div>
+        <div class="main_box">
+            <img class="channel_banner" src="/images/banner_tiktok.png" id="banner_2">
+            <img class="channel_image" src="/images/pfp_placeholder.png" id="image_2">
+            <div id="channel_title_container">
+                <a id="title_2" class="channel_title" target="_blank"></a>
+            </div>
+            <div class="channel_subscribers odometer" id="subs_2"></div>
+            <div class="subscribers"><i class="fa fa-sharp fa-users"></i> Followers</div>
+        </div>
+    </div>
+    <div class="bottom_container">
+        <div class="bottom_box">
+            <div class="odometer" id="gap"></div>
+            <div id="diff">Difference</div>
+        </div>
+    </div>
+</body>
+
+<script>
+    var params=new URLSearchParams(document.location.search.substring(1));
+    var user1=params.get("u1");
+    var user2=params.get("u2");
+    var t1="";
+    var t2="";
+    var s1="";
+    var s2="";
+
+    function stats() {
+        fetch("https://api.subscriberwars.space/tiktok/v2/"+user1).then(res=>res.json()).then(data=>{
+            image_1.src=data.pfp
+            title_1.innerHTML=data.nickname
+            subs_1.innerHTML=data.followers
+            s1=data.followers
+            t1=data.nickname
+            title_1.title="Visit "+data.nickname+"'s profile"
+            title_1.href="https://tiktok.com/@"+data.username
+        })
+        fetch("https://api.subscriberwars.space/tiktok/v2/"+user2).then(res=>res.json()).then(data=>{
+            image_2.src=data.pfp
+            title_2.innerHTML=data.nickname
+            subs_2.innerHTML=data.followers
+            s2=data.followers
+            t2=data.nickname
+            title_2.title="Visit "+data.nickname+"'s profile"
+            title_2.href="https://tiktok.com/@"+data.username
+            page_title.innerHTML=t1+" Vs "+t2+" Live Follower Comparison"
+            if (s1>s2){gap.innerHTML=s1-s2} else {gap.innerHTML=s2-s1}
+        })
+    }
+    stats()
+    setInterval(() => {
+        stats()
+    }, 2000);
+</script>
+
+<style>
+    body {
+        background: #181818;
+        color: #fff;
+        margin: 0;
+        font-family: roboto;
+    }
+    .head {
+        width: 100%;
+        height: 60px;
+        background-image: linear-gradient(to right, #ff0050, #00f2ea);
+        overflow: hidden;
+        border-bottom: 1px solid #000;
+    }
+    .head_text {
+        text-align: center;
+        vertical-align: middle;
+        font-weight: 500;
+        font-size: 3rem;
+    }
+    .main_box_container {
+        width: 100%;
+        height: 700px;
+        display: flex;
+        vertical-align: middle;
+        margin: 0 auto;
+    }
+    .main_box {
+        width: 1260px;
+        height: 700px;
+        background: #0f0f0f;
+        margin: 10px;
+        padding: 10px;
+        margin-top: 20px;
+        border: 1px solid #000;
+        border-radius: 10px;
+        text-align: center;
+    }
+    .channel_banner {
+        width: 100%;
+        border: 1px solid #000;
+        border-radius: 10px;
+        height: 208px;
+    }
+    .channel_image {
+        width: 200px;
+        height: 200px;
+        border: 1px solid #000;
+        border-radius: 10px;
+        top: -100px;
+        position: relative;
+    }
+    .channel_title_container, .channel_title {
+        position: relative;
+        top: -100px;
+        font-size: 4rem;
+        text-decoration: none;
+        color: #fff;
+    }
+    .channel_subscribers {
+        position: relative;
+        top: -90px;
+        font-size: 8vw;
+        font-weight: 500;
+    }
+    .subscribers {
+        position: relative;
+        top: -80px;
+        font-size: 2rem;
+    }
+    .bottom_container {
+        width: 100%;
+        height: 200px;
+        margin: 0 auto;
+        display: flex;
+        margin-top: 60px;
+        vertical-align: middle;
+    }
+    .bottom_box {
+        width: 600px;
+        height: 200px;
+        background: #0f0f0f;
+        border: 1px solid #000;
+        border-radius: 10px;
+        text-align: center;
+        margin: 0 auto;
+        padding: 10px;
+    }
+    #gap {
+        font-size: 6rem;
+        font-weight: 500;
+    }
+    #diff {
+        font-size: 3rem;
+        font-weight: 400;
+    }
+    ::-webkit-scrollbar {
+        width: 5px;
+    }
+    ::-webkit-scrollbar-track {
+        border-radius: 2.5px;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: #ff0050;
+        border-radius: 2.5px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: #00f2ea;
+        border-radius: 2.5px;
+    }
+</style>
